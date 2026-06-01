@@ -1,7 +1,7 @@
 """
 ApplyMate AI - Main Application Entry Point
 ==========================================
-Open Source Hackathon 2025 | Elite Coders
+Open Source Hackathon 2026 | Elite Coders
 Author: Dnyaneshwar Gumalwad
 """
 
