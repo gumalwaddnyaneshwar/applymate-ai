@@ -1,0 +1,28 @@
+Job Title: Machine Learning Engineer (Fresher)
+Company: TechCorp India Pvt. Ltd.
+Location: Pune, Maharashtra
+
+About the Role:
+We are looking for a passionate Machine Learning Engineer to join our AI team.
+You will work on building and deploying ML models for real-world applications.
+
+Requirements:
+- Bachelor's degree in Computer Science, AI/ML, or related field
+- Strong understanding of Machine Learning algorithms (supervised, unsupervised)
+- Proficiency in Python, TensorFlow, or PyTorch
+- Experience with NLP and text processing
+- Familiarity with REST APIs and FastAPI
+- Knowledge of Git and version control
+- Good communication and problem-solving skills
+
+Nice to Have:
+- Experience with HuggingFace Transformers
+- Knowledge of Docker and deployment
+- Hands-on with cloud platforms (AWS, GCP)
+- Open source contributions
+
+Responsibilities:
+- Develop and train ML models
+- Collaborate with the data engineering team
+- Deploy models using FastAPI / Flask
+- Document code and maintain GitHub repositories
