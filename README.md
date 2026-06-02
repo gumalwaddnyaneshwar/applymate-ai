@@ -192,5 +192,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ## 🏆 Built For
 
 <div align="center">
-  <strong>Open Source Hackathon 2025 · Elite Coders · <a href="https://oshack.xyz">oshack.xyz</a></strong>
+  <strong>Open Source Hackathon 2026 · Elite Coders · <a href="https://oshack.xyz">oshack.xyz</a></strong>
 </div>
