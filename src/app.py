@@ -223,8 +223,11 @@ if "🏠" in page:
 # ATS SCORE PAGE
 # ════════════════════════════════════════════════════════════════════════════
 elif "📊" in page:
-    from src.ats_scorer import calculate_ats_score
-    from src.utils import extract_text_from_pdf
+    import sys
+    import os
+    sys.path.append(os.path.dirname(__file__))
+    from ats_scorer import calculate_ats_score
+    from utils import extract_text_from_pdf
 
     st.markdown("<div class='section-header'>📊 ATS Score Analyzer</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-sub'>Upload your resume and paste the job description to get your ATS compatibility score.</div>", unsafe_allow_html=True)
