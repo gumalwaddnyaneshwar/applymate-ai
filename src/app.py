@@ -56,6 +56,9 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 .kw-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
 .priority-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.72rem; font-weight: 600; margin-left: 0.5rem; }
 .summary-box { background: rgba(108, 99, 255, 0.08); border: 1px solid rgba(108, 99, 255, 0.25); border-radius: 14px; padding: 1.2rem 1.5rem; margin: 1rem 0; }
+.week-card { background: rgba(108,99,255,0.05); border: 1px solid rgba(108,99,255,0.2); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.q-card { background: rgba(255,255,255,0.03); border-left: 3px solid #6C63FF; border-radius: 0 12px 12px 0; padding: 1.2rem 1.5rem; margin-bottom: 1rem; }
+.q-category { display: inline-block; background: rgba(108,99,255,0.15); color: #A89CFF; padding: 0.15rem 0.6rem; border-radius: 50px; font-size: 0.72rem; font-weight: 600; margin-bottom: 0.5rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -123,7 +126,7 @@ if "🏠" in page:
         ("📊", "ATS Score", "Know your score before the recruiter even sees it"),
         ("🔑", "Keyword Gap", "AI-powered keyword gap detection with priority ranking"),
         ("✍️", "Cover Letter", "AI-tailored cover letter for every JD"),
-        ("📈", "Skill Roadmap", "Know what to learn and how fast"),
+        ("📈", "Skill Roadmap", "Personalized learning path with free resources"),
         ("🎤", "Interview Prep", "Role-specific Q&A so you're never caught off guard"),
     ]
     for col, (icon, title, desc) in zip(cols, features):
@@ -250,7 +253,7 @@ elif "✍️" in page:
         uploaded_file = st.file_uploader("Resume", type=["pdf"], label_visibility="collapsed", key="cl_resume")
         st.markdown("**📋 Paste Job Description**")
         jd_text = st.text_area("JD", placeholder="Paste the full job description here...", height=180, label_visibility="collapsed", key="cl_jd")
-        st.markdown("**👤 Your Details (Optional but recommended)**")
+        st.markdown("**👤 Your Details (Optional)**")
         user_name = st.text_input("Your Full Name", placeholder="Dnyaneshwar Gumalwad")
         company_name = st.text_input("Company Name", placeholder="GlobalLogic India")
         role_name = st.text_input("Role Applying For", placeholder="Machine Learning Engineer")
@@ -285,17 +288,148 @@ elif "✍️" in page:
                 else:
                     st.error("Cover letter generation failed. API quota may be exceeded. Try again later.")
         else:
-            st.markdown("<div style='text-align:center; padding:4rem 2rem;'><div style='font-size:3rem;'>✍️</div><div style='color:#505080;'>Fill in your details and click Generate<br>to get your AI-written cover letter.</div></div>", unsafe_allow_html=True)
+            st.markdown("<div style='text-align:center; padding:4rem 2rem;'><div style='font-size:3rem;'>✍️</div><div style='color:#505080;'>Fill in your details and click Generate to get your AI-written cover letter.</div></div>", unsafe_allow_html=True)
 
 # ════════════════════════════════════════════════════════════════════════════
-# COMING SOON
+# SKILL ROADMAP
 # ════════════════════════════════════════════════════════════════════════════
-else:
-    module_info = {
-        "📈": ("Skill Roadmap", "Day 5", "Personalized learning path with free resources"),
-        "🎤": ("Interview Prep", "Day 5", "Role-specific Q&A with model answers"),
-    }
-    for key, (name, day, desc) in module_info.items():
-        if key in page:
-            st.markdown(f"<div style='text-align:center; padding:5rem 2rem;'><div style='font-size:4rem; margin-bottom:1rem;'>{key}</div><div class='section-header'>{name}</div><div class='section-sub'>{desc}</div><div style='margin-top:2rem; display:inline-block; background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.3); color:#A89CFF; padding:0.5rem 1.5rem; border-radius:50px; font-size:0.85rem; font-weight:600;'>🚧 Building Now · Launching {day}</div></div>", unsafe_allow_html=True)
-            break
+elif "📈" in page:
+    from skill_roadmap import generate_skill_roadmap
+    from utils import extract_text_from_pdf
+    st.markdown("<div class='section-header'>📈 Skill Gap Roadmap</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-sub'>Powered by Gemini AI — get a personalized week-by-week learning plan with free resources.</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns([1, 1], gap="large")
+    with col1:
+        st.markdown("**📄 Upload Your Resume (PDF)**")
+        uploaded_file = st.file_uploader("Resume", type=["pdf"], label_visibility="collapsed", key="sr_resume")
+        st.markdown("**📋 Paste Job Description**")
+        jd_text = st.text_area("JD", placeholder="Paste the full job description here...", height=280, label_visibility="collapsed", key="sr_jd")
+        generate_btn = st.button("📈 Generate My Roadmap", use_container_width=True)
+    with col2:
+        if generate_btn:
+            if not uploaded_file or not jd_text.strip():
+                st.error("⚠️ Please upload your resume and paste the job description.")
+            else:
+                with st.spinner("📈 Gemini AI is building your roadmap... (15-20 seconds)"):
+                    resume_text = extract_text_from_pdf(uploaded_file)
+                    result = generate_skill_roadmap(resume_text, jd_text)
+                if result:
+                    # Readiness Score
+                    score = result.get("readiness_score", 0)
+                    color = "#48C78E" if score >= 70 else "#FFB347" if score >= 40 else "#FF6363"
+                    st.markdown(f"<div class='score-container'><div class='score-number' style='color:{color};'>{score}%</div><div style='color:#A89CFF; font-size:0.9rem; font-weight:600; margin-top:0.3rem;'>Job Readiness</div><div style='color:#505080; font-size:0.8rem;'>{result.get('current_level','')} → {result.get('target_level','')}</div></div>", unsafe_allow_html=True)
+                    st.progress(score / 100)
+
+                    # Overall tip
+                    tip = result.get("overall_tip", "")
+                    if tip:
+                        st.markdown(f"<div class='summary-box'><div style='font-size:0.8rem; color:#A89CFF; font-weight:600; margin-bottom:0.4rem;'>🤖 AI ASSESSMENT</div><div style='color:#E8E8F0; font-size:0.9rem; line-height:1.6;'>{tip}</div></div>", unsafe_allow_html=True)
+
+                    # Skills you have
+                    skills_have = result.get("skills_you_have", [])
+                    if skills_have:
+                        st.markdown("**✅ Skills You Already Have**")
+                        found_html = "".join([f"<span class='keyword-found'>{s['skill']} ({s['level']})</span>" for s in skills_have])
+                        st.markdown(f"<div style='margin-bottom:1rem;'>{found_html}</div>", unsafe_allow_html=True)
+
+                    # Skills to learn
+                    skills_learn = result.get("skills_to_learn", [])
+                    if skills_learn:
+                        st.markdown("**📚 Skills to Learn (With Free Resources)**")
+                        for skill in skills_learn:
+                            priority = skill.get("priority", "Medium")
+                            p_color = "#FF6363" if priority == "High" else "#FFB347" if priority == "Medium" else "#A0A0A0"
+                            st.markdown(f"""
+                            <div class='kw-card'>
+                                <div style='margin-bottom:0.5rem;'>
+                                    <span style='color:#E8E8F0; font-weight:600; font-size:0.95rem;'>{skill['skill']}</span>
+                                    <span class='priority-badge' style='background:rgba(255,99,99,0.1); color:{p_color}; border:1px solid {p_color};'>{priority} Priority</span>
+                                    <span style='color:#505080; font-size:0.78rem; margin-left:0.5rem;'>⏱ {skill.get('time_to_learn','')}</span>
+                                </div>
+                                <div style='color:#7070A0; font-size:0.82rem; margin-bottom:0.5rem;'>📝 {skill.get('how_to_add_to_resume','')}</div>
+                                <div style='font-size:0.8rem; color:#6C63FF; font-weight:600; margin-bottom:0.3rem;'>Free Resources:</div>
+                                {"".join([f'<div style=\"margin-left:0.5rem;\"><a href=\"{r[\"url\"]}\" target=\"_blank\" style=\"color:#A89CFF; font-size:0.8rem;\">🔗 {r[\"name\"]}</a></div>' for r in skill.get('free_resources', [])])}
+                            </div>
+                            """, unsafe_allow_html=True)
+
+                    # Week by week plan
+                    plan = result.get("week_by_week_plan", [])
+                    if plan:
+                        st.markdown("**🗓️ Week-by-Week Action Plan**")
+                        for week in plan:
+                            st.markdown(f"""
+                            <div class='week-card'>
+                                <div style='color:#6C63FF; font-weight:700; font-size:0.85rem; margin-bottom:0.3rem;'>WEEK {week['week']}</div>
+                                <div style='color:#E8E8F0; font-size:0.9rem; margin-bottom:0.3rem;'>{week['focus']}</div>
+                                <div style='color:#48C78E; font-size:0.8rem;'>🎯 Goal: {week['goal']}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                else:
+                    st.error("Roadmap generation failed. API quota may be exceeded. Try again later.")
+        else:
+            st.markdown("<div style='text-align:center; padding:4rem 2rem;'><div style='font-size:3rem;'>📈</div><div style='color:#505080;'>Upload your resume and paste a JD to get your personalized learning roadmap.</div></div>", unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════════════════════
+# INTERVIEW PREP
+# ════════════════════════════════════════════════════════════════════════════
+elif "🎤" in page:
+    from interview_prep import generate_interview_questions
+    from utils import extract_text_from_pdf
+    st.markdown("<div class='section-header'>🎤 Interview Prep</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-sub'>Powered by Gemini AI — role-specific questions with model answers so you're never caught off guard.</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns([1, 1], gap="large")
+    with col1:
+        st.markdown("**📄 Upload Your Resume (PDF)**")
+        uploaded_file = st.file_uploader("Resume", type=["pdf"], label_visibility="collapsed", key="ip_resume")
+        st.markdown("**📋 Paste Job Description**")
+        jd_text = st.text_area("JD", placeholder="Paste the full job description here...", height=280, label_visibility="collapsed", key="ip_jd")
+        generate_btn = st.button("🎤 Generate Interview Questions", use_container_width=True)
+    with col2:
+        if generate_btn:
+            if not uploaded_file or not jd_text.strip():
+                st.error("⚠️ Please upload your resume and paste the job description.")
+            else:
+                with st.spinner("🎤 Gemini AI is preparing your interview questions... (15-20 seconds)"):
+                    resume_text = extract_text_from_pdf(uploaded_file)
+                    result = generate_interview_questions(resume_text, jd_text)
+                if result:
+                    st.markdown(f"<div class='summary-box'><div style='font-size:0.8rem; color:#A89CFF; font-weight:600; margin-bottom:0.3rem;'>🎯 INTERVIEW PROFILE</div><div style='color:#E8E8F0; font-size:0.9rem;'>Role: <strong>{result.get('role','')}</strong> · Level: <strong>{result.get('difficulty','')}</strong></div></div>", unsafe_allow_html=True)
+
+                    # Technical Questions
+                    tech_qs = result.get("technical_questions", [])
+                    if tech_qs:
+                        st.markdown("**💻 Technical Questions**")
+                        for i, q in enumerate(tech_qs, 1):
+                            with st.expander(f"Q{i}: {q['question']}"):
+                                st.markdown(f"<span class='q-category'>{q.get('category','')}</span> <span class='q-category'>{q.get('difficulty','')}</span>", unsafe_allow_html=True)
+                                st.markdown(f"**Model Answer:**\n\n{q.get('model_answer','')}")
+                                st.info(f"💡 Tip: {q.get('tip','')}")
+
+                    # HR Questions
+                    hr_qs = result.get("hr_questions", [])
+                    if hr_qs:
+                        st.markdown("**🤝 HR / Behavioral Questions**")
+                        for i, q in enumerate(hr_qs, 1):
+                            with st.expander(f"Q{i}: {q['question']}"):
+                                st.markdown(f"**Model Answer:**\n\n{q.get('model_answer','')}")
+                                st.info(f"💡 Tip: {q.get('tip','')}")
+
+                    # Project Questions
+                    proj_qs = result.get("project_questions", [])
+                    if proj_qs:
+                        st.markdown("**🚀 Project-Based Questions**")
+                        for i, q in enumerate(proj_qs, 1):
+                            with st.expander(f"Q{i}: {q['question']}"):
+                                st.markdown(f"**Model Answer:**\n\n{q.get('model_answer','')}")
+                                st.info(f"💡 Tip: {q.get('tip','')}")
+
+                    # Quick Tips
+                    tips = result.get("quick_tips", [])
+                    if tips:
+                        st.markdown("**⚡ Quick Interview Tips**")
+                        for tip in tips:
+                            st.markdown(f"<div class='result-card'><span style='color:#FFB347;'>⚡</span> <span style='color:#E8E8F0; font-size:0.9rem;'>{tip}</span></div>", unsafe_allow_html=True)
+                else:
+                    st.error("Interview prep generation failed. API quota may be exceeded. Try again later.")
+        else:
+            st.markdown("<div style='text-align:center; padding:4rem 2rem;'><div style='font-size:3rem;'>🎤</div><div style='color:#505080;'>Upload your resume and paste a JD to get role-specific interview questions.</div></div>", unsafe_allow_html=True)
