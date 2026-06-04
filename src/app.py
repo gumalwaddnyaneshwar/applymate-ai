@@ -348,7 +348,7 @@ elif "📈" in page:
                                 </div>
                                 <div style='color:#7070A0; font-size:0.82rem; margin-bottom:0.5rem;'>📝 {skill.get('how_to_add_to_resume','')}</div>
                                 <div style='font-size:0.8rem; color:#6C63FF; font-weight:600; margin-bottom:0.3rem;'>Free Resources:</div>
-                                {"".join([f'<div style=\"margin-left:0.5rem;\"><a href=\"{r[\"url\"]}\" target=\"_blank\" style=\"color:#A89CFF; font-size:0.8rem;\">🔗 {r[\"name\"]}</a></div>' for r in skill.get('free_resources', [])])}
+                                {chr(10).join(['<div style="margin-left:0.5rem;"><a href="' + r.get("url","") + '" target="_blank" style="color:#A89CFF; font-size:0.8rem;">🔗 ' + r.get("name","") + '</a></div>' for r in skill.get('free_resources', [])])}
                             </div>
                             """, unsafe_allow_html=True)
 
