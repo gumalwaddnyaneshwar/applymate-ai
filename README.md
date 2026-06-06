@@ -26,7 +26,7 @@
 ### 📊 ATS Score Analyzer
 > Upload your resume + paste a JD → get instant ATS compatibility score with missing keywords and improvement tips.
 
-![ATS Score Analyzer](assets/ats_score.png)
+![ATS Score Analyzer](assets/ats_score_analyzer.png)
 
 ### 🔑 AI Keyword Gap Analyzer — 72/100 Excellent Match!
 > Groq AI analyzes your resume vs JD and gives priority-ranked keyword suggestions with action items.
