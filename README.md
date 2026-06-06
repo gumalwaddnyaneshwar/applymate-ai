@@ -21,6 +21,30 @@
 
 ---
 
+## 🖼️ Screenshots
+
+### 📊 ATS Score Analyzer
+> Upload your resume + paste a JD → get instant ATS compatibility score with missing keywords and improvement tips.
+
+![ATS Score Analyzer](assets/ats_score.png)
+
+### 🔑 AI Keyword Gap Analyzer — 72/100 Excellent Match!
+> Groq AI analyzes your resume vs JD and gives priority-ranked keyword suggestions with action items.
+
+![Keyword Gap Analyzer](assets/keyword_analysis.png)
+
+### ✍️ AI Cover Letter Generator
+> Generates a professional, tailored cover letter with email subject line in seconds.
+
+![Cover Letter Generator](assets/cover_letter.png)
+
+### 🎤 Interview Prep
+> Role-specific technical, HR, and project-based questions with model answers.
+
+![Interview Prep](assets/interview_prep.png)
+
+---
+
 ## ❓ Why ApplyMate AI?
 
 > **"Why not just use Jobscan or Enhancv?"**
@@ -144,6 +168,7 @@ applymate-ai/
 │   ├── skill_roadmap.py    # AI skill roadmap builder
 │   ├── interview_prep.py   # AI interview Q&A generator
 │   └── utils.py            # PDF parsing helpers
+├── assets/                 # Screenshots for README
 ├── .streamlit/
 │   └── config.toml         # Streamlit theme config
 ├── sample_data/
@@ -191,7 +216,7 @@ Contributions are welcome! This project was built during the **Open Source Hacka
 BCA in AI/ML | JSPM University, Pune
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://linkedin.com/in/gumalwaddnyaneshwar)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=flat&logo=github)](https://github.com/gumalwaddnyaneshwar/applymate-ai)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=flat&logo=github)](https://github.com/gumalwaddnyaneshwar)
 [![Research Paper](https://img.shields.io/badge/Research-IJARSCT%202026-green?style=flat)](https://ijarsct.co.in/Paper35343.pdf)
 
 ---
